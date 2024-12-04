@@ -1,0 +1,61 @@
+import random
+
+class WordGuessingGame:
+    def __init__(self):
+        self.words_with_hints = {
+            "python": "A popular programming language.",
+            "developer": "Someone who writes code.",
+            "algorithm": "A step-by-step procedure for calculations.",
+            "software": "Programs used by computers.",
+            "database": "A structured set of data."
+        }
+        self.word, self.hint = random.choice(list(self.words_with_hints.items()))
+        self.guessed_letters = set()
+        self.attempts = 6
+
+    def display_word(self):
+        return ' '.join([letter if letter in self.guessed_letters else '_' for letter in self.word])
+
+    def get_feedback(self):
+        guessed_word_progress = self.display_word()
+        correct_guesses = [letter for letter in self.guessed_letters if letter in self.word]
+        incorrect_guesses = [letter for letter in self.guessed_letters if letter not in self.word]
+        return guessed_word_progress, correct_guesses, incorrect_guesses
+
+    def play(self):
+ print("Welcome to the Word Guessing Game!")
+        print(f"Hint: {self.hint}")
+        print(f"The word has {len(self.word)} letters.")
+
+        while self.attempts > 0:
+            guessed_word_progress, correct_guesses, incorrect_guesses = self.get_feedback()
+            print(guessed_word_progress)
+            print(f"Correct guesses: {correct_guesses}")
+            print(f"Incorrect guesses: {incorrect_guesses}")
+            guess = input("Guess a letter: ").lower()
+
+            if len(guess) != 1 or not guess.isalpha():
+                print("Invalid input. Please guess a single letter.")
+                continue
+
+            if guess in self.guessed_letters:
+                print("You've already guessed that letter. Try again.")
+                continue
+
+            self.guessed_letters.add(guess)
+
+            if guess in self.word:
+                print("Good guess!")
+            else:
+                self.attempts -= 1
+print(f"Wrong guess. You have {self.attempts} attempts left.")
+
+            if all(letter in self.guessed_letters for letter in self.word):
+                print(f"Congratulations! You've guessed the word: {self.word}")
+                break
+        else:
+            print(f"Out of attempts! The word was: {self.word}")
+
+if __name__ == "__main__":
+    game = WordGuessingGame()
+    game.play()
